@@ -1,2 +1,2 @@
 # HipoMap
-![](https://www.dropbox.com/s/0kodaxa262ia3fo/Capture.PNG?dl=0)
+![](https://www.dropbox.com/preview/Pathology_Representation/IJMS/Figures/Capture.PNG)
