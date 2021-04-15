@@ -2,7 +2,7 @@
 
 ![](Capture.PNG)
 
-##Installation
+## Installation
 HipoMap support `Python 3`.
 It requires `numpy`, `pandas`, `tensorflow`, `scipy`, `scikit-learn`, `seaborn`, `matplotlib`, `openslide`.
 
@@ -12,7 +12,7 @@ pip install hipo_map
 
 ## Documentation
 
-##Quick Start
+## Quick Start
 ```python
 #Model load
 #if you want to loaded keras pre-trained model
