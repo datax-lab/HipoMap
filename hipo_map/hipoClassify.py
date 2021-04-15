@@ -1,4 +1,4 @@
-from model_rep import model_rep
+from hipo_map.model_rep import model_rep
 import numpy as np
 from tensorflow.keras import optimizers
 import tensorflow as tf
@@ -6,8 +6,6 @@ from scipy import interp
 from sklearn import metrics
 import pandas as pd
 import os
-import seaborn as sns
-import matplotlib.pylab as plt
 
 
 class HipoMap:
@@ -40,20 +38,22 @@ class HipoMap:
         model.compile(optimizer=SGD, loss="binary_crossentropy", metrics=['accuracy', tf.keras.metrics.AUC()])
         model.fit(train_X, train_y, batch_size=batchsize, epochs=epoch, validation_data=(valid_X, valid_y))
 
+        self.model = model
+
         return model
 
-    def predict(self, model, test_X):
+    def predict(self, test_X):
         test_X = (test_X - self.mean) / self.std
         test_X = np.reshape(test_X, (len(test_X), self.K, self.activation_size))
         test_X = np.expand_dims(test_X, axis=3)
 
-        prediction = model.predict(test_X)
-
+        prediction = self.model.predict(test_X)
+        self.prediction = prediction
         return prediction
 
-    def evaluate_score(self, label, prediction):
+    def evaluate_score(self, label):
         label = np.array(label)
-        fpr, tpr, threshold = metrics.roc_curve(label, prediction)
+        fpr, tpr, threshold = metrics.roc_curve(label, self.prediction)
         mean_fpr = np.linspace(0, 1, 100)
         tpr_score = interp(mean_fpr, fpr, tpr)
         auc_score = metrics.auc(fpr, tpr)
