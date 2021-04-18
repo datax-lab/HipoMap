@@ -50,15 +50,16 @@ def generateHipoMap(inputpath, outputpath, magnification="20x", patch_size=(299,
         list_wsi = os.listdir(inputpath)
         for wsi in list_wsi:
             if wsi[-3:] == 'svs':
-                print(wsi)
+                print("start " + wsi)
                 data = inputpath + wsi
                 repmap = extractingPatches(data, magnification, patch_size, Annotation, Annotatedlevel, Requiredlevel,
                                            intermediate_layer_model)
+                print("done")
                 save_path = outputpath + wsi[:-4]
                 np.save(save_path, repmap)
 
 
-def draw_represent(path, K, max_value=1000):
+def draw_represent(path, K, max_value=1000, save=False):
     list_represent = os.listdir(path)
     for rep in list_represent:
         print(path + rep)
@@ -70,6 +71,8 @@ def draw_represent(path, K, max_value=1000):
             plt.ylabel("patches", fontsize=5)
             ax = sns.heatmap(heat[:K], vmax=max_value)
             plt.show()
+            if save:
+                plt.savefig(path + rep[:-4] + '.png')
             plt.pause(0.1)
         except:
             pass
