@@ -60,5 +60,5 @@ hipo_model = hipo.fit(trainset, validset, lr=0.1, epoch=20, batchsize=1, activat
 prediction = hipo.predict(test_X=testset[0])
 
 #4. get score (tpr, fpr, auc)
-tpr, mean_fpr, auc = hipo.evaluate_score(label=testset[1])
+tpr, mean_fpr, auc = hipo.evaluate_score(label=testset[1], prediction=prediction)
 ```
