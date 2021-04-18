@@ -6,7 +6,7 @@
 HipoMap support `Python 3`.
 It requires `numpy`, `pandas`, `tensorflow`, `scipy`, `scikit-learn`, `seaborn`, `matplotlib`, `openslide-python`, `cv2`.
 
-###Quick installation of HipoMap
+### Quick installation of HipoMap
 
 * Update system for install openslide-tools (to install openslide-python)
 ```
