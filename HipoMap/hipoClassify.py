@@ -1,4 +1,4 @@
-from hipo_map.model_rep import model_rep
+from HipoMap.model_rep import model_rep
 import numpy as np
 from tensorflow.keras import optimizers
 import tensorflow as tf
@@ -8,7 +8,7 @@ import pandas as pd
 import os
 
 
-class HipoMap:
+class HipoClass:
 
     def __init__(self, K):
         self.K = K
@@ -48,12 +48,12 @@ class HipoMap:
         test_X = np.expand_dims(test_X, axis=3)
 
         prediction = self.model.predict(test_X)
-        self.prediction = prediction
+
         return prediction
 
-    def evaluate_score(self, label):
+    def evaluate_score(self, label, prediction):
         label = np.array(label)
-        fpr, tpr, threshold = metrics.roc_curve(label, self.prediction)
+        fpr, tpr, threshold = metrics.roc_curve(label, prediction)
         mean_fpr = np.linspace(0, 1, 100)
         tpr_score = interp(mean_fpr, fpr, tpr)
         auc_score = metrics.auc(fpr, tpr)
