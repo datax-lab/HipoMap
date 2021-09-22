@@ -2,6 +2,7 @@ from HipoMap.model_rep import model_rep
 import numpy as np
 from tensorflow.keras import optimizers
 import tensorflow as tf
+from tensorflow.keras.models import load_model
 from numpy import interp
 from sklearn import metrics
 import pandas as pd
@@ -10,38 +11,51 @@ import os
 
 class HipoClass:
     """
-    HipoClass is for predicting Class of representation map (Whole-Slide Image based).
+    HipoClass is to classify the Whole-Slide Image by using graphical representation map through hipoMap.
+
+    The main contributions of HipoMap are as follows:
+
+    * Creating graphical representation maps as feature extraction of WSI.
+
+    * Efficient training of the model without ROI annotations.
+
+    * Allowing easier interpretation on findings of morphological patterns.
 
     Parameters
     ----------
-    K: int
+    K: int [default=50]
         top K patches.
-    activation_size:
-
-    ismodel:
-    modelpath:
-
+    activation_size: int [default=64]
+        The Number of pixels in the activation map of the last con layer of the pre-trained model (width * height).
+        The pre-trained model is a model that has already been trained on a patch basis and used to create a graphical presentation map.
+    ismodel: bool [default=False]
+        If True, HipoClass uses the model provided by the user when classifying the representation map.
+        If False, HipoClass builds a model for classifying the representation map.
+    modelpath: None of str [default=None]
+        The path of pre-trained model for classifying representation map.
+        If ismodel is False, the value of the modelpath should be set to None.
+        If ismodel is True, the value of the modelpath must be set the str value where the model is located.
 
     Attributes
     ----------
-    activation_size: int
-        Number of pixels in last conv layer's activation map (width * height).
+    model: keras.Model
+        Keras model for classify Cancer/Normal from representation map.
 
 
 
     Examples
     ----------
-    >>> from HipoClassify imort HipoClass
-    >>> hipo = HipoClass(K=50)
+    >>> from HipoMap.classify import HipoClass
+    >>> hipo = HipoClass(K=50, activation_size=64, ismodel=False)
     >>> train, valid, test = hipo.split('./splitbase.csv', "/Dataset/Normal/", "/Dataset/Cancer/")
-    >>> hipo.fit(train, valid, lr=0.01, epoch=50, batchsize=1, activation_size=64)
+    >>> hipo.fit(train, valid, lr=0.01, epoch=50, batchsize=1)
 
     >>> testX, label = test[0], test[1]
-    >>> prediction = hipo.predict(testX)
+    >>> prediction = hipo.predict_with_test(testX)
     >>> tpr, fpr, auc = hipo.evaluae_score(label, prediction)
     """
 
-    def __init__(self, K, activation_size, ismodel, modelpath):
+    def __init__(self, K=50, activation_size=64, ismodel=False, modelpath=None):
         self.K = K
         self.activation_size = activation_size
         self.ismodel = ismodel
@@ -50,37 +64,35 @@ class HipoClass:
         else:
             self.model = model_rep(self.K, self.activation_size)
 
-    def fit(self, train_set, valid_set, lr, epoch, batchsize):
+    def fit(self, train_set, valid_set, lr=0.01, epoch=50, batchsize=1):
         """
         Fit the classification model with Train, Validation dataset.
 
         Parameters
         ----------
-        train_set: array
-                    Train dataset with feature, label.
-        valid_set: array
-                    Validation dataset with feature, label.
-        lr: float
-             learning rate.
-        epoch: int
-        batchsize: int
-                     The number of batch.
-        activation_size: int
-                          The number of pixels in last conv layer's activation map (width * height).
+        train_set: 2D array [rep_map, label]
+            Train dataset with representation map, label.
+            rep_map is array (n_samples, n_pixels)
+            if label is 0, sample's class is normal, or sample's class is cancer.
+        valid_set: 2D array [rep_map, label]
+            Validation dataset with representation map, label.
+        lr: float, default=0.01
+            learning rate.
+        epoch: int, default=50
+        batchsize: int, default=1
+            The number of batch.
 
         Attributes
         ----------
-        mean:
-            The average value of train dataset.
-        std: array
-              The standard deviation of train dataset.
-        model:
-            The classification model learned with representatino map.
+        mean: np.ndarray
+            The array of mean values for each pixel value of the representation maps in train dataset.
+        std: np.ndarray
+            The standard deviation values for each pixel value of the representation maps in train dataset.
 
 
         Returns
         ----------
-        model: model
+        keras.Model
         """
 
         train_X, train_y = train_set
@@ -108,16 +120,17 @@ class HipoClass:
 
     def predict_with_test(self, test_X):
         """
-        Predict the class of WSI based Representation map.
+        Predict the class of WSI based Representation map with test Dataset from split method.
 
         Parameters
         ----------
-        train_X: array
-                  Test feature dataset.
+        test_X: 2D array (n_samples, n_pixels)
+            representation map in testset
 
         Returns
         ----------
-        prediction: float array
+        array
+            prediction
         """
         test_X = (test_X - self.mean) / self.std
         test_X = np.reshape(test_X, (len(test_X), self.K, self.activation_size))
@@ -128,6 +141,19 @@ class HipoClass:
         return prediction
 
     def predict_with_sample(self, path):
+        """
+        Predict the class of WSI based Representation map.
+
+        Parameters
+        ----------
+        path: str
+            The path of directory where the representation map to be predicted is located.
+
+        Returns
+        ----------
+        array
+            prediction, classofHipo
+        """
         list_hipo = os.listdir(path)
         prediction = []
         classofHipo = []
@@ -162,12 +188,8 @@ class HipoClass:
 
         Returns
         ----------
-        tpr_score: float array
-                    The value of tpr.
-        mean_fpr: float array
-                    The mean value of fpr.
-        auc_score: float
-                    The value of AUC(Area under curve).
+        float array, float
+            tpr_score, mean_fpr, auc_score
         """
         label = np.array(label)
         fpr, tpr, threshold = metrics.roc_curve(label, prediction)
@@ -185,34 +207,30 @@ class HipoClass:
 
         Parameters
         ----------
-        split_csv:
+        split_csv: str
             Path of split baseline file (.csv).
-        dir_normal:
+        dir_normal: str
             Path of Normal representation map dataset.
-        dir_cancer:
+        dir_cancer: str
             Path of Cancer representation map dataset.
 
         Returns
         ----------
-        (X_train, y_train):
-            A tuple of feature, label set about trainset.
-        (X_valid, y_valid):
-            A tuple of feature, label set about validation set.
-        (X_test, y_test):
-            A tuple of feature, label set about testset.
+        tuple
+            (X_train, y_train), (X_valid, y_valid), (X_test, y_test)
         """
         splits = pd.read_csv(split_csv, header=None)
         trains = splits[splits[3] == 'train']
         valids = splits[splits[3] == 'valid']
         tests = splits[splits[3] == 'test']
 
-        X_train, y_train = self.load_Dataset(trains, dir_normal, dir_cancer)
-        X_valid, y_valid = self.load_Dataset(valids, dir_normal, dir_cancer)
-        X_test, y_test = self.load_Dataset(tests, dir_normal, dir_cancer)
+        X_train, y_train = self._load_dataset(trains, dir_normal, dir_cancer)
+        X_valid, y_valid = self._load_dataset(valids, dir_normal, dir_cancer)
+        X_test, y_test = self._load_dataset(tests, dir_normal, dir_cancer)
 
         return (X_train, y_train), (X_valid, y_valid), (X_test, y_test)
 
-    def load_Dataset(self, base, dir_normal, dir_cancer):
+    def _load_dataset(self, base, dir_normal, dir_cancer):
         """
         The method for loading stored representation maps with labels based on baseline.
         """

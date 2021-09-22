@@ -2,7 +2,7 @@ from HipoMap.model_rep import model_rep
 import numpy as np
 from tensorflow.keras import optimizers
 import tensorflow as tf
-from scipy import interp
+from numpy import interp
 from sklearn import metrics
 import pandas as pd
 import os
