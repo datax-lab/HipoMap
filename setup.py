@@ -4,8 +4,8 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 setuptools.setup(
-    name="HipoMap",
-    version="0.1.3",
+    name="hipomap",
+    version="0.3.4",
     author="Jeongyeon Park",
     author_email="ParkJYeon2808@gmail.com",
     url="https://github.com/datax-lab/HipoMap",
@@ -13,7 +13,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
-    package_data={'hipo_map': ['WsSI_Preprocessing/Preprocessing/*.py']},
+    # package_data={'hipo_map': ['hipomap/WSI_Preprocessing/Preprocessing/*.py']},
     install_requires=['numpy', 'opencv-python', 'pandas', 'Pillow', 'scikit-learn', 'scipy', 'seaborn', 'tensorflow',
                       'matplotlib'],
     python_requires=">=3",

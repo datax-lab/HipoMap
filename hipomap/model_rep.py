@@ -4,15 +4,15 @@ from tensorflow.keras.models import Model
 
 def model_rep(top, acti_size):
     """
-    Build a model for classifying the generated HipoMap into Cancer/Normal.
+    Build a model for classifying the generated hipomap into Cancer/Normal.
 
     Parameters
     ----------
     top: int
         The number of top patches which wanted to deal with K.
     acti_size: int
-        The width of HipoMap ndarray.
-        The activation map size of the last conv layer from model which generated HipoMap (activation map's width * height).
+        The width of hipomap ndarray.
+        The activation map size of the last conv layer from model which generated hipomap (activation map's width * height).
     Returns
     -------
 

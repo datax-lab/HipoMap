@@ -1,4 +1,4 @@
-from HipoMap.model_rep import model_rep
+from hipomap.model_rep import model_rep
 import numpy as np
 from tensorflow.keras import optimizers
 import tensorflow as tf

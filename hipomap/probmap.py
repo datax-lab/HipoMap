@@ -3,8 +3,8 @@ from PIL import ImageFile
 import sys
 import seaborn as sns
 import numpy as np
-from WSI_Preprocessing.Preprocessing.WSI_Scanning import readWSI
 from openslide import OpenSlide
+from hipomap.utils import readWSI
 import cv2
 import gc
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -40,25 +40,23 @@ def generating_probmap(path_data, path_prob, path_save):
                 slide_dimensions = slide_.level_dimensions
                 if len(slide_dimensions) == 3:
                     heat = np.load(path_prob + heat_)
-                    reconstructedimage, slide1 = extracting(slide, Annotation=None, Annotatedlevel=0, Requiredlevel=0,
-                                                            heat=heat)
+                    reconstructedimage, slide1 = extracting(slide, heat=heat)
                     cv2.imwrite(path_save + heat_[-12:-8] + ".png", reconstructedimage)
                     cv2.imwrite(path_save + heat_[-12:-8] + "_org.png", slide1)
                 else:
                     heat = np.load(path_prob + heat_)
-                    reconstrcutedimage, slide1 = extracting(slide, Annotation=None, Annotatedlevel=0, Requiredlevel=1,
-                                                            heat=heat)
+                    reconstructedimage, slide1 = extracting(slide, heat=heat)
                     cv2.imwrite(path_save + heat_[-12:-8] + ".png", reconstructedimage)
                     cv2.imwrite(path_save + heat_[-12:-8] + "_org.png", slide1)
 
 
-def extracting(inputsvs, Annotation=None, Annotatedlevel=0, Requiredlevel=0, heat=None):
-    slide1, slidedim = readWSI(inputsvs, "20x", Annotation, Annotatedlevel, Requiredlevel)
-    reconstrcutedimage = np.zeros_like(slide1)
-    reconstrcutedimage = np.array(reconstrcutedimage, dtype='uint8')
+def extracting(inputsvs, heat=None):
+    slide1, slidedim = readWSI(inputsvs, "20x")
+    reconstructedimage = np.zeros_like(slide1)
+    reconstructedimage = np.array(reconstructedimage, dtype='uint8')
     slide1 = np.array(slide1, dtype='uint8')
-    reconstrcutedimagen = cv2.resize(reconstrcutedimage,
-                                     (int(len(reconstrcutedimage[0]) / 5), int(len(reconstrcutedimage) / 5)),
+    reconstructedimagen = cv2.resize(reconstructedimage,
+                                     (int(len(reconstructedimage[0]) / 5), int(len(reconstructedimage) / 5)),
                                      interpolation=cv2.INTER_AREA)
     slide1n = cv2.resize(slide1, (int(len(slide1[0]) / 5), int(len(slide1) / 5)), interpolation=cv2.INTER_AREA)
     heat1 = sorted(np.array(heat), key=lambda x: x[0], reverse=True)
@@ -73,14 +71,14 @@ def extracting(inputsvs, Annotation=None, Annotatedlevel=0, Requiredlevel=0, hea
             cv2.putText(img, text, (0 + 5, len(img) - 15), font, 1, (10, 10, 10), 2)
         centerpoint20x = ((j * 299), (i * 299))
         try:
-            reconstrcutedimagen[int(centerpoint20x[0] - 44 / 2):int(centerpoint20x[0] - 44 / 2 + 60),
+            reconstructedimagen[int(centerpoint20x[0] - 44 / 2):int(centerpoint20x[0] - 44 / 2 + 60),
             int(centerpoint20x[1] - 14 / 2): int(centerpoint20x[1] - 14 / 2 + 60)] = img
         except:
             None
 
-    reconstrcutedimagen[np.where((reconstrcutedimagen == [0, 0, 0]).all(axis=2))] = [255, 255, 255]
+    reconstructedimagen[np.where((reconstructedimagen == [0, 0, 0]).all(axis=2))] = [255, 255, 255]
 
-    return reconstrcutedimagen, slide1n
+    return reconstructedimagen, slide1n
 
 
 def plot_generate(y_pred):

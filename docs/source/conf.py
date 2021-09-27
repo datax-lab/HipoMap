@@ -6,14 +6,22 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import os
+import sys
+import typing
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(1, os.path.abspath('../../hipomap'))
+sys.path.insert(2, os.path.abspath('../../hipomap/WSI_Preprocessing'))
+sys.path.insert(3, os.path.abspath('../../hipomap/WSI_Preprocessing/Preprocessing'))
+
 
 # -- Project information -----------------------------------------------------
 
-project = 'HipoMap'
+project = 'hipomap'
 copyright = '2021, Jeongyeon Park'
 author = 'Jeongyeon Park'
 
@@ -26,7 +34,8 @@ release = '0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'myst_parser'
+    'myst_parser',
+    'sphinx.ext.autodoc'
 ]
 
 source_suffix = {

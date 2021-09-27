@@ -22,6 +22,12 @@ of the Whole-Slide Images using the deep learning model that you already trained
    getting_started/installation.md
    getting_started/quick_start.md
 
+.. toctree::
+   :maxdepth: 1
+   :caption: API Reference
+
+   api_reference/hipomap.rst
+
 Credit
 ---------------------
 

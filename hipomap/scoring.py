@@ -1,11 +1,11 @@
 import os
-from PIL import ImageFile
-from tensorflow.keras.models import load_model
-import numpy as np
-from WSI_Preprocessing.Preprocessing.WSI_Scanning import readWSI
-from WSI_Preprocessing.Preprocessing.Utilities import stainremover_small_patch_remover1
-from openslide import OpenSlide
 import sys
+
+import numpy as np
+from PIL import ImageFile
+from openslide import OpenSlide
+from tensorflow.keras.models import load_model
+from hipomap.utils import readWSI, stainremover_small_patch_remover1
 
 sys.path.append("")
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -39,21 +39,19 @@ def scoring_probmap(path_model, path_data, path_save, patch_size=(299, 299)):
         slide = OpenSlide(data)
         slide_dimensions = slide.level_dimensions
         if len(slide_dimensions) == 3:
-            probmap = extracting(data, patch_size=patch_size,
-                                 Annotation=None, Annotatedlevel=0, Requiredlevel=0, model=model)
+            probmap = extracting(data, patch_size=patch_size, model=model)
         else:
-            probmap = extracting(data, patch_size=patch_size,
-                                 Annotation=None, Annotatedlevel=0, Requiredlevel=1, model=model)
+            probmap = extracting(data, patch_size=patch_size, model=model)
         probmap_path = path_save + slide_[:-4] + "_new"
         np.save(probmap_path, probmap)
 
 
-def extracting(inputsvs, patch_size=(299, 299), Annotation=None, Annotatedlevel=0, Requiredlevel=0, model=None):
+def extracting(inputsvs, patch_size=(299, 299), model=None):
     """
     Patches are extracted from the whole slide to predict the probability for each patch.
     The predicted probability and the location of the extracted patch on the slide are saved in a tuple (probability, X of slide, Y of slide).
     """
-    slide1, slidedim = readWSI(inputsvs, "20x", Annotation, Annotatedlevel, Requiredlevel)
+    slide1, slidedim = readWSI(inputsvs, "20x")
     ALL_P1 = []
     for i in range(int(len(slide1[0]) / 299)):
         for j in range(int(len(slide1) / 299)):

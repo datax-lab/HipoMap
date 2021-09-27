@@ -109,7 +109,7 @@ from tensorflow.keras.models import load_model
 model = load_model(r'./pre_model.h5')
 
 # Make representation map
-from HipoMap.hipoMap import generateHipoMap
+from hipomap import generateHipoMap
 
 generateHipoMap(inputpath="<path>/Dataset/", outputpath="<path>/Rep/", model=model,
                 layer_name="block5_conv3", patch_size=(224, 224))
@@ -119,7 +119,7 @@ generateHipoMap(inputpath="<path>/Dataset/", outputpath="<path>/Rep/", model=mod
 
 ```python
 # Draw heatmap
-from HipoMap.hipoMap import draw_represent
+from hipomap import draw_represent
 
 draw_represent(path="<path>/Dataset/", K=50, max_value=1000, save=False)
 ```
@@ -131,7 +131,7 @@ test set.
 
 ```python
 # Classify data to cancer/normal with representation map
-from HipoMap.classify import HipoClass
+from hipomap.classify import HipoClass
 
 hipo = HipoClass(K=50)
 
@@ -153,12 +153,12 @@ tpr, mean_fpr, auc = hipo.evaluate_score(label=testset[1], prediction=prediction
 
 ```python
 # Creating probability score array 
-from HipoMap.scoring import scoring_probmap
+from hipomap.scoring import scoring_probmap
 
 scoring_probmap(path_model="./pre_model.h5", path_data="./Dataset/Test/", path_save="./Result/prob_test/")
 
 # Generating Probmap
-from HipoMap.probmap import generating_probmap
+from hipomap import generating_probmap
 
 generating_probmap(path_data='./Dataset/Test/', path_prob='./Result/prob_test/', path_save='./Result/probmap')
 ```

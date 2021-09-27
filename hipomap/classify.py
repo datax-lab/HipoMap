@@ -1,4 +1,4 @@
-from HipoMap.model_rep import model_rep
+from hipomap.model_rep import model_rep
 import numpy as np
 from tensorflow.keras import optimizers
 import tensorflow as tf
@@ -13,7 +13,7 @@ class HipoClass:
     """
     HipoClass is to classify the Whole-Slide Image by using graphical representation map through hipoMap.
 
-    The main contributions of HipoMap are as follows:
+    The main contributions of hipomap are as follows:
 
     * Creating graphical representation maps as feature extraction of WSI.
 
@@ -45,7 +45,7 @@ class HipoClass:
 
     Examples
     ----------
-    >>> from HipoMap.classify import HipoClass
+    >>> from hipomap import HipoClass
     >>> hipo = HipoClass(K=50, activation_size=64, ismodel=False)
     >>> train, valid, test = hipo.split('./splitbase.csv', "/Dataset/Normal/", "/Dataset/Cancer/")
     >>> hipo.fit(train, valid, lr=0.01, epoch=50, batchsize=1)

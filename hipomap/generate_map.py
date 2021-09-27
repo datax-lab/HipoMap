@@ -1,20 +1,22 @@
-import numpy as np
 import os
-from WSI_Preprocessing.Preprocessing import WSI_Scanning, Utilities
-from tensorflow.keras.models import Model, load_model
-import seaborn as sns
+
 import matplotlib.pylab as plt
+import numpy as np
+import seaborn as sns
+from tensorflow.keras.models import Model
+from hipomap.utils import readWSI, stainremover_small_patch_remover1
+
 
 
 def generateHipoMap(inputpath, outputpath, magnification="20x", patch_size=(299, 299),
                     model=None, layer_name=None):
     """
-    Generate and Save graphical representation map (HipoMap - Histopathology Map) by using last conv layer from pre-trained model.
+    Generate and Save graphical representation map (hipomap - Histopathology Map) by using last conv layer from pre-trained model.
     The pre-trained model is a model that has already been trained on a patch basis and used to create a graphical presentation map.
 
-    HipoMap is the framework for generating disease-specific graphical representation map from each Whole Slide Image.
+    hipomap is the framework for generating disease-specific graphical representation map from each Whole Slide Image.
 
-    The main contributions of HipoMap are as follows:
+    The main contributions of hipomap are as follows:
 
     * Creating graphical representation maps as feature extraction of WSI.
 
@@ -27,9 +29,9 @@ def generateHipoMap(inputpath, outputpath, magnification="20x", patch_size=(299,
     inputpath: str
         The path of directory where the whole slide image(.svs) files which wanted to create HipoMpa are located.
     outputpath: str
-        The path of directory to save the HipoMap file(.npy).
+        The path of directory to save the hipomap file(.npy).
     magnification: str [default="20x"]
-        The magnification to be applied when creating HipoMap.
+        The magnification to be applied when creating hipomap.
         In more detail, to deal with the patch to be extracted and predicted.
     patch_size: tuple(width x height) [default=(299,299)]
         The size of the patch to be extracted from the Whole Slide image.
@@ -67,14 +69,14 @@ def extractingPatches(inputsvs, magnification, patch_size, intermediate_layer_mo
     if intermediate_layer_model is None:
         print("Error : Intermediate model not provided as parameter")
     else:
-        slide, _ = WSI_Scanning.readWSI(inputsvs, magnification, Annotation=None, Annotatedlevel=0, Requiredlevel=0)
+        slide, _ = readWSI(inputsvs, magnification)
         ALL = []
         for i in range(int(len(slide[0]) / 299)):
             for j in range(int(len(slide) / 599)):
                 centerpoint = ((j * 299 + (patch_size[0] / 2)), (i * 299 + (patch_size[1] / 2)))
                 sample_img = slide[int(centerpoint[0] - patch_size[0] / 2):int(centerpoint[0] + patch_size[0] / 2),
                              int(centerpoint[1] - patch_size[1] / 2): int(centerpoint[1] + patch_size[1] / 2)]
-                patchs = Utilities.stainremover_small_patch_remover1(sample_img, patch_size)
+                patchs = stainremover_small_patch_remover1(sample_img, patch_size)
                 if patchs is None:
                     None
                 else:
