@@ -1,4 +1,4 @@
-from hipomap.model_rep import model_rep
+from hipomap.model_rep import generate_classification_model
 import numpy as np
 from tensorflow.keras import optimizers
 import tensorflow as tf
@@ -33,7 +33,7 @@ class HipoClass:
         valid_y = np.array(valid_y)
 
         SGD = optimizers.SGD(lr=lr)
-        model = model_rep(self.K, self.activation_size)
+        model = generate_classification_model(self.K, self.activation_size)
 
         model.compile(optimizer=SGD, loss="binary_crossentropy", metrics=['accuracy', tf.keras.metrics.AUC()])
         model.fit(train_X, train_y, batch_size=batchsize, epochs=epoch, validation_data=(valid_X, valid_y))

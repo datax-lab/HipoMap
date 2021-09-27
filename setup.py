@@ -13,9 +13,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
-    # package_data={'hipo_map': ['hipomap/WSI_Preprocessing/Preprocessing/*.py']},
     install_requires=['numpy', 'opencv-python', 'pandas', 'Pillow', 'scikit-learn', 'scipy', 'seaborn', 'tensorflow',
-                      'matplotlib'],
+                      'matplotlib', 'openslide-python'],
     python_requires=">=3",
     classifiers=[
         "Programming Language :: Python :: 3",

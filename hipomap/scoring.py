@@ -1,13 +1,12 @@
 import os
-import sys
 
 import numpy as np
 from PIL import ImageFile
 from openslide import OpenSlide
 from tensorflow.keras.models import load_model
-from hipomap.utils import readWSI, stainremover_small_patch_remover1
 
-sys.path.append("")
+from hipomap.utils import read_wsi, stain_remover_small_patch_remover
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
@@ -26,9 +25,11 @@ def scoring_probmap(path_model, path_data, path_save, patch_size=(299, 299)):
     patch_size: tuple [default=(299,299)]
         The size of the patch to be extracted from the Whole Slide image.
     """
+
     model = load_model(path_model)
     list_data = os.listdir(path_data)
     list_slide = []
+
     for data in list_data:
         if data[-3:] == 'svs':
             list_slide.append(data)
@@ -46,12 +47,13 @@ def scoring_probmap(path_model, path_data, path_save, patch_size=(299, 299)):
         np.save(probmap_path, probmap)
 
 
-def extracting(inputsvs, patch_size=(299, 299), model=None):
+def extracting(input_svs, patch_size=(299, 299), model=None):
     """
     Patches are extracted from the whole slide to predict the probability for each patch.
-    The predicted probability and the location of the extracted patch on the slide are saved in a tuple (probability, X of slide, Y of slide).
+    The predicted probability and the location of the extracted patch on the slide are saved in a tuple
+    (probability, X of slide, Y of slide).
     """
-    slide1, slidedim = readWSI(inputsvs, "20x")
+    slide1, slidedim = read_wsi(input_svs, "20x")
     ALL_P1 = []
     for i in range(int(len(slide1[0]) / 299)):
         for j in range(int(len(slide1) / 299)):
@@ -59,7 +61,7 @@ def extracting(inputsvs, patch_size=(299, 299), model=None):
             centerpoint20x = ((j * 299 + (patch_size[0] / 2)), (i * 299 + (patch_size[1] / 2)))
             sample_img = slide1[int(centerpoint20x[0] - patch_size[0] / 2):int(centerpoint20x[0] + patch_size[0] / 2),
                          int(centerpoint20x[1] - patch_size[1] / 2): int(centerpoint20x[1] + patch_size[1] / 2)]
-            patchs = stainremover_small_patch_remover1(sample_img, patch_size)
+            patchs = stain_remover_small_patch_remover(sample_img, patch_size)
             if patchs is None:
                 None
             else:

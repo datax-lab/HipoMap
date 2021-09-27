@@ -1,6 +1,8 @@
 ======================================================
-``hipomap.generated_map`` --- HipoMap core components
+``hipomap.scoring`` --- HipoMap Scoring components
 ======================================================
 
-.. automodule:: hipomap.generated_map
+.. automodule:: hipomap.scoring
    :members:
+   :show-inheritance:
+

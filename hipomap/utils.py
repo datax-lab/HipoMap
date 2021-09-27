@@ -3,7 +3,11 @@ import numpy as np
 from openslide import (OpenSlide)
 
 
-def readWSI(slide_path, magnification):
+def relu(x):
+    return x * (x > 0)
+
+
+def read_wsi(slide_path, magnification):
     slide = OpenSlide(slide_path)
     slide_dimensions = slide.level_dimensions
 
@@ -27,7 +31,7 @@ def readWSI(slide_path, magnification):
     return slide_img_1, slide_dimensions
 
 
-def stainremover_small_patch_remover1(img, patch_size):
+def stain_remover_small_patch_remover(img, patch_size):
     if len(img) < patch_size[1] or len(img[0]) < patch_size[0]:
         return None
     else:

@@ -109,9 +109,9 @@ from tensorflow.keras.models import load_model
 model = load_model(r'./pre_model.h5')
 
 # Make representation map
-from hipomap import generateHipoMap
+from hipomap.core import generate_hipomap
 
-generateHipoMap(inputpath="<path>/Dataset/", outputpath="<path>/Rep/", model=model,
+generate_hipomap(inputpath="<path>/Dataset/", outputpath="<path>/Rep/", model=model,
                 layer_name="block5_conv3", patch_size=(224, 224))
 ```
 
@@ -119,7 +119,7 @@ generateHipoMap(inputpath="<path>/Dataset/", outputpath="<path>/Rep/", model=mod
 
 ```python
 # Draw heatmap
-from hipomap import draw_represent
+from hipomap.core import draw_represent
 
 draw_represent(path="<path>/Dataset/", K=50, max_value=1000, save=False)
 ```
@@ -131,7 +131,7 @@ test set.
 
 ```python
 # Classify data to cancer/normal with representation map
-from hipomap.classify import HipoClass
+from hipomap.core import HipoClass
 
 hipo = HipoClass(K=50)
 
@@ -140,7 +140,7 @@ trainset, validset, testset = hipo.split("split.csv", dir_normal="<path>/Dataset
                                          dir_cancer="<path>/Dataset/Cancer")
 
 # 2. Train the classifier
-hipo_model = hipo.fit(trainset, validset, lr=0.1, epoch=20, batchsize=1)
+hipo_model = hipo.fit(trainset, validset, lr=0.1, epoch=20, batch_size=1)
 
 # 3. Get prediction value
 prediction = hipo.predict_with_test(test_X=testset[0])
@@ -158,7 +158,7 @@ from hipomap.scoring import scoring_probmap
 scoring_probmap(path_model="./pre_model.h5", path_data="./Dataset/Test/", path_save="./Result/prob_test/")
 
 # Generating Probmap
-from hipomap import generating_probmap
+from hipomap.probmap import generating_probmap
 
 generating_probmap(path_data='./Dataset/Test/', path_prob='./Result/prob_test/', path_save='./Result/probmap')
 ```

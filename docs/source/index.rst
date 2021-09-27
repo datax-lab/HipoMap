@@ -26,7 +26,9 @@ of the Whole-Slide Images using the deep learning model that you already trained
    :maxdepth: 1
    :caption: API Reference
 
-   api_reference/hipomap.rst
+   api_reference/core.rst
+   api_reference/probmap.rst
+   api_reference/scoring.rst
 
 Credit
 ---------------------
