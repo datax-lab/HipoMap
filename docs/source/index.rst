@@ -20,7 +20,6 @@ of the Whole-Slide Images using the deep learning model that you already trained
 
    getting_started/overview.md
    getting_started/installation.md
-   getting_started/quick_start.md
 
 .. toctree::
    :maxdepth: 1
@@ -29,6 +28,13 @@ of the Whole-Slide Images using the deep learning model that you already trained
    api_reference/core.rst
    api_reference/probmap.rst
    api_reference/scoring.rst
+
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Quick Start
+
+   quick_start/Tutorial.ipynb
 
 Credit
 ---------------------
