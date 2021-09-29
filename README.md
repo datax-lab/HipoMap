@@ -75,7 +75,7 @@ Latest PyPI stable release
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/HipoMap?label=pypi%20downloads)](https://pypi.org/project/HipoMap/)
 
 ```
-pip install HipoMap
+pip install hipomap
 ```
 
 ### Dependencies+
