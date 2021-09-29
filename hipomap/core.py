@@ -33,7 +33,6 @@ def draw_represent(path, K, max_value=1000, save=False):
     """
     list_represent = os.listdir(path)
     for rep in list_represent:
-        print(path + rep)
         try:
             plt.clf()
             heat = np.load(path + rep)

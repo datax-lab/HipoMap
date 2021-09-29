@@ -92,10 +92,10 @@ def generating_probmap(path_data, path_prob, path_save):
                 if len(slide_dimensions) == 3:
                     heat = np.load(path_prob + heat_)
                     reconstructedimage, slide1 = extracting(slide, heat=heat)
-                    cv2.imwrite(path_save + heat_[-12:-8] + ".png", reconstructedimage)
-                    cv2.imwrite(path_save + heat_[-12:-8] + "_org.png", slide1)
+                    cv2.imwrite(path_save + heat_[:-8] + ".png", reconstructedimage)
+                    cv2.imwrite(path_save + heat_[:-8] + "_org.png", slide1)
                 else:
                     heat = np.load(path_prob + heat_)
                     reconstructedimage, slide1 = extracting(slide, heat=heat)
-                    cv2.imwrite(path_save + heat_[-12:-8] + ".png", reconstructedimage)
-                    cv2.imwrite(path_save + heat_[-12:-8] + "_org.png", slide1)
+                    cv2.imwrite(path_save + heat_[:-8] + ".png", reconstructedimage)
+                    cv2.imwrite(path_save + heat_[:-8] + "_org.png", slide1)
