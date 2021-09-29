@@ -21,7 +21,6 @@ def read_wsi(slide_path, magnification):
     else:
         dictx = {"40x": 0, "20x": 1, "10x": 2, "5x": 3}
 
-    print(dictx[magnification])
     mag = dictx[magnification]
     slide_img_1 = slide.read_region((0, 0), mag,
                                     (slide.level_dimensions[mag][0], slide.level_dimensions[mag][1])).convert('RGB')
