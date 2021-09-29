@@ -8,7 +8,9 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/HipoMap?label=pypi%20downloads)](https://pypi.org/project/HipoMap/)
 [![PyPI - License](https://img.shields.io/pypi/l/HipoMap)](https://pypi.org/project/HipoMap/)
 
-<img alt="HipoMap" src="hipomap.png">
+<!--<img alt="HipoMap" src="Img/hipomap.png">-->
+<img alt="HipoMap_Logic" src="Img/hipomap1.png">
+<img alt="HipoMap_howtomakeHM" src="Img/hipomap2.png">
 
 HipoMap is slide-based histopathology analysis framework in which a disease-specific graphical representation map is
 generated from each slide. Further, HipoMap, which is a small and fixed size, is introduced as input for

@@ -8,4 +8,7 @@ outperformed current state-of-art whole slide analysis methods. We assessed the 
 images and interpreted the model based on class probability scores and HipoMap scores. A pathologist clinically verified
 the results of interpretation.
 
-<img alt="HipoMap" src="../_images/hipomap.png">
+<!--<img alt="HipoMap" src="../_images/hipomap.png">-->
+<img alt="HipoMap Logic" src="../_images/hipomap1.png">
+<img alt="HipoMap howtomakeHM" src="../_images/hipomap2.png">
+
