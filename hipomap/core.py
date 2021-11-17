@@ -76,7 +76,7 @@ def extracting_patches(input_svs, magnification, patch_size, intermediate_layer_
                     y_pred = y_pred[0][0]
                     alpha_patch = np.zeros((1, width, height))
                     for t in range(len(intermediate_output[0][0][0])):
-                        grad = np.gradient(intermediate_output[:, :, :, t].flatten(), abs(1 - y_pred + 0.0001)) / 64
+                        grad = np.gradient(intermediate_output[:, :, :, t].flatten(), abs(1-y_pred + 0.0001)) / 64
                         alpha = sum(grad)
                         alpha_patch += alpha * intermediate_output[:, :, :, t]
                     alpha_patch = relu(alpha_patch)
